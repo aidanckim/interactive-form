@@ -32,12 +32,14 @@ const selectTheme = document.querySelectorAll('#design option')[0]
 colorLabel.textContent = 'Please select a T-shirt theme'
 colorDropDown.hidden = true
 selectTheme.hidden = true
+colorLabel.hidden = true
 
 designTheme.addEventListener('change', (e) => {
   for (var i = 0; i < colorOptions.length; i++) {
     console.log(colorOptions[i])
     const eventValue = e.target.value
     colorDropDown.hidden = false
+    colorLabel.hidden = false
     if (eventValue === 'js puns') {
       colorOptions[0].selected = true
       if (colorOptions[i].innerHTML.includes('JS Puns')) {
@@ -193,15 +195,33 @@ cardDiv.textContent = 'This is required.'
 cardDiv.style.color = 'red'
 cardLabel.appendChild(cardDiv)
 cardDiv.hidden = true
+const cardDiv2 = document.createElement('div')
+cardDiv2.textContent = 'Your number must be between 13 and 16.'
+cardDiv2.style.color = 'red'
+cardLabel.appendChild(cardDiv2)
+cardDiv2.hidden = true
 
 const cardValidator = () => {
   const cardNum = card.value
+
   if (cardNum.length > 12 && cardNum.length < 17) {
     cardDiv.hidden = true
+    cardDiv2.hidden = true
     card.style.borderColor = 'white'
     return true
-  } else {
+  } else if (cardNum.length >= 1 && cardNum.length <= 12) {
+    cardDiv.hidden = true
+    cardDiv2.hidden = false
+    card.style.borderColor = 'red'
+    return true
+  } else if (cardNum.length >= 17) {
+    cardDiv.hidden = true
+    cardDiv2.hidden = false
+    card.style.borderColor = 'red'
+    return true
+  } else if (cardNum.length === 0) {
     cardDiv.hidden = false
+    cardDiv2.hidden = true
     card.style.borderColor = 'red'
     return false
   }
@@ -248,6 +268,18 @@ const cvvValidator = () => {
     return false
   }
 }
+
+form.addEventListener('change', () => {
+  activityValidator()
+  cardValidator()
+  zipValidator()
+  cvvValidator()
+  allLetter(name)
+  allNumericCard(card)
+  allNumericZip(zip)
+  allNumericCVV(cvv)
+  validEmail(email)
+})
 
 form.addEventListener('submit', (e) => {
   if (!activityValidator()) {
